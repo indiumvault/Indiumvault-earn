@@ -3,7 +3,7 @@
 This change adds a protected account profile table and numeric support UIDs for IndiumVault Earn.
 
 ## Important status
-This migration is prepared on the `feature/username-numeric-uid` branch. It is **not live** until reviewed, merged, and applied to the Supabase project `hprbcntedjrdowreqmak`.
+The schema migration has been applied to Supabase project `hprbcntedjrdowreqmak`, and UID `55555` is verified for the existing administrator. The website changes remain on the `feature/username-numeric-uid` branch until reviewed and merged.
 
 ## UID policy
 - Existing administrator auth UUID `8205d1e2-ffa9-4a26-8708-b625d96ec7b4` is assigned support UID `55555` by the migration.
@@ -26,4 +26,4 @@ This migration is prepared on the `feature/username-numeric-uid` branch. It is *
 5. Keep the existing account's auth UUID unchanged.
 
 ## Not included yet
-This migration alone does not enable username/password sign-in, Google OAuth, or Discord OAuth. Username sign-in must be implemented with a secure server-side lookup that does not expose email addresses to anonymous visitors. Google/Discord require provider application credentials in Supabase Auth settings. Do not put OAuth client secrets or service-role keys in GitHub Pages.
+Username sign-in Edge Function `username-sign-in` is deployed, and the branch frontend invokes it. The updated frontend is not yet live until the PR is merged and GitHub Pages deploys. Username sign-in must be implemented with a secure server-side lookup that does not expose email addresses to anonymous visitors. Google/Discord require provider application credentials in Supabase Auth settings. Do not put OAuth client secrets or service-role keys in GitHub Pages.
