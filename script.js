@@ -138,5 +138,4 @@ $('adminUidLookupForm').addEventListener('submit',async event=>{event.preventDef
 
 
 
-$('googleSignIn').addEventListener('click',async()=>{if(!authClient){setAuthMessage('Authentication is not configured.',true);return}const {error}=await authClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(error)setAuthMessage(error.message||'Google sign-in is not configured yet.',true)});
-$('discordSignIn').addEventListener('click',async()=>{if(!authClient){setAuthMessage('Authentication is not configured.',true);return}const {error}=await authClient.auth.signInWithOAuth({provider:'discord',options:{redirectTo:window.location.origin+window.location.pathname}});if(error)setAuthMessage(error.message||'Discord sign-in is not configured yet.',true)});
+
