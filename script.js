@@ -2,6 +2,7 @@ const $=id=>document.getElementById(id);
 const authDialog=$('authDialog');
 let authMode='signin',authClient=null,currentUser=null;
 const TURNSTILE_SITE_KEY='0x4AAAAAAFaLnmNCXFgW9MWA';
+const ADMIN_USER_ID='8205d1e2-ffa9-4a26-8708-b625d96ec7b4';
 let turnstileWidgetId=null,captchaToken=null,turnstileLoading=null;
 function resetCaptcha(){captchaToken=null;if(window.turnstile&&turnstileWidgetId!==null){try{window.turnstile.reset(turnstileWidgetId)}catch(e){console.warn('Turnstile reset failed',e)}}}
 function ensureTurnstile(){
@@ -124,13 +125,12 @@ function adminMessage(message,isError=false){const el=$('adminMessage');if(!el)r
 
 
 
-async function loadAdminReview(){
+function loadAdminReview(){
  const panel=$('adminPanel');
- if(!panel||!authClient||!currentUser){if(panel)panel.hidden=true;return}
- // Use the same admin-only account lookup RPC that powers this panel.
- const {error}=await authClient.rpc('admin_lookup_account_by_uid',{p_support_uid:'__admin_check__'});
- panel.hidden=!!error;
- if(error)console.warn('Admin panel access unavailable:',error.message);
+ if(!panel)return;
+ // Show the controls only for the configured admin account. The database RPC
+ // independently enforces the same identity check before returning any data.
+ panel.hidden=!currentUser||currentUser.id!==ADMIN_USER_ID;
 }
 
 
