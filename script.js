@@ -10,14 +10,14 @@ function renderAuth(){const signedIn=!!currentUser;$('authStatus').textContent=s
 function openAuth(){setAuthMessage('');if(!isConfigured||!window.supabase){setAuthMessage('Authentication is not connected yet. Check config.js and AUTH_SETUP.md.',true)}renderAuth();if(authDialog.showModal)authDialog.showModal();else alert('Please open this site in a modern browser to use the account dialog.')}
 function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 async function loadAccountData(){
- if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
+ if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];renderMyRedemptions([]);$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
  $('taskList').innerHTML='<p class="muted">Loading tasks…</p>';$('rewardList').innerHTML='<p class="muted">Loading rewards…</p>';
  const [ledgerResult,taskResult,rewardResult,submissionResult,redemptionResult]=await Promise.all([
   authClient.from('points_ledger').select('amount').eq('user_id',currentUser.id),
   authClient.from('tasks').select('id,title,description,category,points,destination_url').eq('is_active',true).order('created_at',{ascending:false}),
   authClient.from('rewards').select('id,title,description,points_cost,reward_type').eq('is_active',true).order('points_cost',{ascending:true}),
   authClient.from('task_submissions').select('id,task_id,status,submitted_at').eq('user_id',currentUser.id).order('submitted_at',{ascending:false}),
-  authClient.from('redemptions').select('id,reward_id,points_cost,status,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(10)
+  authClient.rpc('user_list_redemptions')
  ]);
  const err=[ledgerResult,taskResult,rewardResult,submissionResult,redemptionResult].find(x=>x.error);
  if(err){console.error('Account data load failed:',err.error);$('taskList').innerHTML='<p class="muted">Could not load account data. Please refresh and try again.</p>';$('rewardList').innerHTML='<p class="muted">Rewards could not be loaded.</p>';return}
@@ -54,7 +54,7 @@ function renderMyRedemptions(rows){
  if(!currentUser){list.innerHTML='<p class="muted">Sign in to view your requests.</p>';return}
  if(!rows.length){list.innerHTML='<p class="muted">No redemption requests yet.</p>';return}
  const labels={pending:'Pending review',approved:'Approved · awaiting fulfilment',fulfilled:'Fulfilled',rejected:'Rejected · points refunded'};
- list.innerHTML=rows.map(row=>{const reward=activeRewards.find(r=>r.id===row.reward_id);return '<article class="redemption-history"><b>'+escapeHtml(reward?.title||'Reward request')+'</b><span>'+Number(row.points_cost).toLocaleString('en-IN')+' pts · '+escapeHtml(labels[row.status]||row.status)+'</span><small>'+escapeHtml(new Date(row.created_at).toLocaleDateString())+'</small></article>'}).join('');
+ list.innerHTML=rows.map(row=>{return '<article class="redemption-history"><b>'+escapeHtml(row.reward_title||'Reward request')+'</b><span>'+Number(row.points_cost).toLocaleString('en-IN')+' pts · '+escapeHtml(labels[row.status]||row.status)+'</span><small>'+escapeHtml(new Date(row.created_at).toLocaleDateString())+'</small></article>'}).join('');
 }
 $('profile').addEventListener('click',openAuth);
 $('authClose').addEventListener('click',()=>authDialog.close());
