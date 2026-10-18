@@ -10,7 +10,7 @@ function renderAuth(){const signedIn=!!currentUser;$('authStatus').textContent=s
 function openAuth(){setAuthMessage('');if(!isConfigured||!window.supabase){setAuthMessage('Authentication is not connected yet. Check config.js and AUTH_SETUP.md.',true)}renderAuth();if(authDialog.showModal)authDialog.showModal();else alert('Please open this site in a modern browser to use the account dialog.')}
 function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 async function loadAccountData(){
- if(!authClient||!currentUser){activeTasks=[];activeRewards=[];submissions=[];$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
+ if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
  $('taskList').innerHTML='<p class="muted">Loading tasks…</p>';$('rewardList').innerHTML='<p class="muted">Loading rewards…</p>';
  const [ledgerResult,taskResult,rewardResult,submissionResult]=await Promise.all([
   authClient.from('points_ledger').select('amount').eq('user_id',currentUser.id),
