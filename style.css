@@ -29,3 +29,22 @@
 .password-toggle:hover{color:var(--text,#f5f6ff);background:rgba(255,255,255,.06)}
 .password-toggle:focus-visible{outline:2px solid #68d8ee;outline-offset:2px}
 .password-eye{width:1.3rem;height:1.3rem;display:block}
+
+
+/* Rewards hub polish: clearer hierarchy, responsive cards, and visible keyboard focus */
+:where(button,a,input,textarea,select):focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.balance{position:relative;overflow:hidden;box-shadow:0 18px 50px #0002}
+.balance:after{content:"";position:absolute;width:170px;height:170px;right:-65px;top:-80px;border:1px solid #ffffff18;border-radius:50%;box-shadow:0 0 0 22px #ffffff05,0 0 0 44px #ffffff04;pointer-events:none}
+.stats div,.task,.rewards article,.admin-tool,.profile-item{transition:border-color .18s ease,transform .18s ease,background-color .18s ease}
+.task:hover,.rewards article:hover{border-color:#625c91;transform:translateY(-2px)}
+.rewards article{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.rewards article .reward-cost{margin-top:auto!important;padding-top:9px}
+.rewards article .redeem-btn{margin-top:12px}
+.rewards article p:not(.reward-cost){overflow-wrap:anywhere}
+.section .heading{padding-bottom:10px;border-bottom:1px solid #ffffff0c}
+.section .heading h2{font-size:25px}
+.referral{position:relative;overflow:hidden}
+.referral:after{content:"↗";position:absolute;right:17px;top:12px;color:#b9afff;font-size:32px;opacity:.25;font-family:'Space Grotesk',sans-serif}
+button:disabled{cursor:not-allowed}
+@media(max-width:520px){.rewards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.rewards article{padding:13px 11px}.rewards article b{font-size:12px}.rewards article p{font-size:10px}.rewards article .redeem-btn{font-size:10px}.stats{margin-bottom:27px}.balance{padding:18px}.amount{font-size:39px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
