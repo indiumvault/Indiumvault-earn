@@ -11,6 +11,33 @@
 <p class="muted">Find an account using its numeric support UID. Account lookup is restricted to the administrator.</p>
 <p id="adminMessage" class="auth-message" role="status" aria-live="polite"></p>
 <div class="admin-tool"><div class="heading"><div><p class="eyebrow">03 / ACCOUNT SUPPORT</p><h2>Find account by UID</h2></div><small>Private admin lookup</small></div><form id="adminUidLookupForm" class="admin-form"><label for="adminUidLookup">Numeric support UID</label><input id="adminUidLookup" inputmode="numeric" pattern="[0-9]{5,}" maxlength="12" required placeholder="Enter account UID"><button class="secondary-btn" type="submit">Find account</button></form><div id="adminUidLookupResult" class="admin-list"><p class="muted">Use this only to help users with account support.</p></div></div>
+<div class="admin-tool">
+<div class="heading"><div><p class="eyebrow">04 / OPERATIONS</p><h2>Review queue</h2></div><button id="adminRefresh" class="secondary-btn" type="button">Refresh</button></div>
+<div class="admin-form-row"><div><label>Pending task submissions</label><div id="adminSubmissionList" class="admin-list"><p class="muted">Refresh to load queue.</p></div></div><div><label>Reward requests</label><div id="adminRedemptionList" class="admin-list"><p class="muted">Refresh to load queue.</p></div></div></div>
+</div>
+<div class="admin-tool">
+<div class="heading"><div><p class="eyebrow">05 / PUBLISH</p><h2>Manage tasks</h2></div><small>Admin only</small></div>
+<form id="adminTaskForm" class="admin-form">
+<input id="adminTaskId" type="hidden">
+<label for="adminTaskTitle">Task title</label><input id="adminTaskTitle" maxlength="100" minlength="3" required>
+<label for="adminTaskDescription">Instructions</label><textarea id="adminTaskDescription" maxlength="2000" rows="3"></textarea>
+<div class="admin-form-row"><div><label for="adminTaskCategory">Category</label><input id="adminTaskCategory" maxlength="50" value="general"></div><div><label for="adminTaskPoints">Points</label><input id="adminTaskPoints" type="number" min="0" max="100000" value="10" required></div></div>
+<label for="adminTaskUrl">Destination URL (optional)</label><input id="adminTaskUrl" type="url" maxlength="1000" placeholder="https://…">
+<label class="checkline"><input id="adminTaskActive" type="checkbox" checked> Publish task</label>
+<div class="admin-form-actions"><button class="okay" type="submit">Save task</button><button id="adminTaskReset" class="secondary-btn" type="button">Clear</button></div>
+</form><div id="adminTaskList" class="admin-list"></div>
+</div>
+<div class="admin-tool">
+<div class="heading"><div><p class="eyebrow">06 / CATALOGUE</p><h2>Manage rewards</h2></div><small>Manual fulfilment</small></div>
+<form id="adminRewardForm" class="admin-form">
+<input id="adminRewardId" type="hidden">
+<label for="adminRewardTitle">Reward title</label><input id="adminRewardTitle" maxlength="100" minlength="2" required>
+<label for="adminRewardDescription">Description / fulfilment terms</label><textarea id="adminRewardDescription" maxlength="2000" rows="3"></textarea>
+<div class="admin-form-row"><div><label for="adminRewardCost">Points cost</label><input id="adminRewardCost" type="number" min="1" max="1000000" value="50" required></div><div><label for="adminRewardType">Type</label><select id="adminRewardType"><option value="digital_item">Digital item</option><option value="gift_card">Gift card</option><option value="demo">Demo</option><option value="other">Other</option></select></div></div>
+<label class="checkline"><input id="adminRewardActive" type="checkbox" checked> Show in catalogue</label>
+<div class="admin-form-actions"><button class="okay" type="submit">Save reward</button><button id="adminRewardReset" class="secondary-btn" type="button">Clear</button></div>
+</form><div id="adminRewardList" class="admin-list"></div>
+</div>
 </section>
 <section class="offerwall-panel" id="offers"><div class="offerwall-copy"><p class="eyebrow">THIRD-PARTY OFFERS</p><h2>Offerwalls are on the way</h2><p class="muted">We’re preparing verified partner offers. This section will open only after provider approval, website verification, and secure credit tracking are complete.</p><div class="offerwall-status"><span class="status-dot"></span> Setup in progress</div></div><div class="offerwall-icon" aria-hidden="true">✦</div><p class="offerwall-note">Never pay a fee to access an offer. Eligible offers and rewards may vary by country and provider rules.</p></section>
 <section class="section" id="tasks"><div class="heading"><div><p class="eyebrow">GET STARTED</p><h2>Available tasks</h2></div><small id="taskMeta">Live tasks</small></div><div id="taskList"><p class="muted">Sign in to load available tasks.</p></div></section>
