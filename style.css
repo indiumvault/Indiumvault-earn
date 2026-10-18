@@ -20,3 +20,12 @@
 .profile-banner{display:flex;align-items:center;gap:12px;margin:2px 0 15px}.profile-avatar{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#9b8cff,#54d9ed);color:#111323;font:700 20px 'Space Grotesk',sans-serif}.profile-banner b,.profile-banner small{display:block}.profile-banner b{font-size:14px}.profile-banner small{font-size:10px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}
 .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}.profile-item{border:1px solid #2d3249;border-radius:12px;padding:12px;background:#171a2a}.profile-item small,.profile-item b{display:block}.profile-item small{font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:7px}.profile-item b{font:600 16px 'Space Grotesk',sans-serif;overflow-wrap:anywhere;color:var(--green)}
 .profile-username-form{display:grid;grid-template-columns:1fr;gap:8px;border-top:1px solid #ffffff12;padding-top:13px}.profile-username-form label,.profile-referral label{font-size:11px;color:#c9cee2}.profile-username-form input,.profile-referral input{width:100%;padding:11px 12px;border:1px solid #343752;border-radius:10px;background:#0d101b;color:var(--text);font:inherit;font-size:12px}.profile-referral{border-top:1px solid #ffffff12;padding-top:14px;margin-top:15px;display:grid;gap:8px}.profile-referral .eyebrow{margin-bottom:0}.profile-referral input{font-size:11px}.profile-referral button{margin-top:3px}.profile-panel[hidden]{display:none!important}
+
+
+/* Accessible show/hide control for the password field */
+.password-input-wrap{position:relative;display:flex;align-items:center;width:100%;margin:0 0 14px}
+.password-input-wrap input{width:100%;padding-right:3.5rem;margin:0}
+.password-toggle{position:absolute;right:.45rem;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:2.6rem;height:2.6rem;padding:0;border:0;border-radius:.65rem;background:transparent;color:var(--muted,#9ba3b8);cursor:pointer}
+.password-toggle:hover{color:var(--text,#f5f6ff);background:rgba(255,255,255,.06)}
+.password-toggle:focus-visible{outline:2px solid #68d8ee;outline-offset:2px}
+.password-eye{width:1.3rem;height:1.3rem;display:block}
