@@ -2,7 +2,6 @@ const $=id=>document.getElementById(id);
 const authDialog=$('authDialog');
 let authMode='signin',authClient=null,currentUser=null;
 const TURNSTILE_SITE_KEY='0x4AAAAAAFaLnmNCXFgW9MWA';
-const ADMIN_USER_ID='8205d1e2-ffa9-4a26-8708-b625d96ec7b4';
 let turnstileWidgetId=null,captchaToken=null,turnstileLoading=null;
 function resetCaptcha(){captchaToken=null;if(window.turnstile&&turnstileWidgetId!==null){try{window.turnstile.reset(turnstileWidgetId)}catch(e){console.warn('Turnstile reset failed',e)}}}
 function ensureTurnstile(){
@@ -128,9 +127,9 @@ function adminMessage(message,isError=false){const el=$('adminMessage');if(!el)r
 function loadAdminReview(){
  const panel=$('adminPanel');
  if(!panel)return;
- // Show the controls only for the configured admin account. The database RPC
- // independently enforces the same identity check before returning any data.
- panel.hidden=!currentUser||currentUser.id!==ADMIN_USER_ID;
+ // Keep the UID lookup panel visible for signed-in troubleshooting. The
+ // database RPC independently enforces admin identity before returning data.
+ panel.hidden=!currentUser;
 }
 
 
