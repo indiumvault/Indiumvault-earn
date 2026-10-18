@@ -23,7 +23,7 @@ async function loadAccountData(){
  $('points').textContent=(ledgerResult.data||[]).reduce((sum,row)=>sum+Number(row.amount||0),0).toLocaleString('en-IN');
  submissions=submissionResult.data||[];activeTasks=taskResult.data||[];activeRewards=rewardResult.data||[];
  $('count').textContent=submissions.length;$('rewardCount').textContent=activeRewards.length;$('balanceFoot').textContent='Verified account points · no guaranteed cash value';
- renderTasks();renderRewards();
+ renderTasks();renderRewards();await loadAdminReview();
 }
 let selectedTaskForSubmission=null;
 function renderTasks(){
@@ -51,3 +51,26 @@ $('copy').addEventListener('click',async()=>{$('copyMessage').textContent='Refer
 $('close').addEventListener('click',()=>$('dialog').close());$('okay').addEventListener('click',()=>$('dialog').close());
 if(isConfigured&&window.supabase){try{authClient=window.supabase.createClient(authConfig.url,authConfig.anonKey);authClient.auth.getSession().then(async({data,error})=>{if(!error){currentUser=data.session?.user||null;renderAuth();await loadAccountData()}});authClient.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;renderAuth();queueMicrotask(()=>loadAccountData())})}catch(error){console.error('Supabase initialization failed:',error);authClient=null}}
 renderAuth();
+
+async function loadAdminReview(){
+ const panel=$('adminPanel'),list=$('adminSubmissions'),message=$('adminMessage');
+ if(!panel||!authClient||!currentUser){if(panel)panel.hidden=true;return}
+ const {data,error}=await authClient.rpc('admin_list_pending_submissions');
+ if(error){panel.hidden=true;return}
+ panel.hidden=false;
+ if(!data||!data.length){list.innerHTML='<p class="muted">No pending submissions. New submissions will appear here.</p>';return}
+ list.innerHTML=data.map(item=>{
+  let proof='';
+  if(item.proof_url){try{const u=new URL(item.proof_url);if(['https:','http:'].includes(u.protocol))proof='<p><a class="proof-link" href="'+escapeHtml(u.href)+'" target="_blank" rel="noopener noreferrer">Open proof link ↗</a></p>'}catch{}}
+  return '<article class="admin-submission"><div class="admin-submission-head"><b>'+escapeHtml(item.task_title)+'</b><span>+'+Number(item.task_points||0).toLocaleString('en-IN')+' pts</span></div><p class="muted">'+escapeHtml(item.user_email||item.user_id)+' · '+escapeHtml(new Date(item.submitted_at).toLocaleString())+'</p><p>'+escapeHtml(item.notes||'No notes supplied')+'</p>'+proof+'<div class="admin-actions"><button type="button" data-review="approved" data-id="'+escapeHtml(item.submission_id)+'">Approve</button><button type="button" data-review="rejected" data-id="'+escapeHtml(item.submission_id)+'">Reject</button></div></article>'
+ }).join('');
+ list.querySelectorAll('[data-review]').forEach(button=>button.addEventListener('click',async()=>{
+  const decision=button.dataset.review,submissionId=button.dataset.id;
+  if(!window.confirm((decision==='approved'?'Approve this submission and award the configured points?':'Reject this submission?')))return;
+  list.querySelectorAll('button').forEach(b=>b.disabled=true);message.classList.remove('error');message.textContent='Saving review…';
+  const {data:result,error:reviewError}=await authClient.rpc('admin_review_submission',{p_submission_id:submissionId,p_decision:decision});
+  if(reviewError){message.textContent=reviewError.message||'Review failed. Refresh and try again.';message.classList.add('error')}
+  else{message.textContent=decision==='approved'?'Approved. '+Number(result?.points_awarded||0).toLocaleString('en-IN')+' points awarded.':'Submission rejected.';await loadAccountData();return}
+  await loadAdminReview();
+ }));
+}
