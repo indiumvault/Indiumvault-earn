@@ -41,36 +41,20 @@ as $$
 declare
   candidate text;
   occupied bigint;
-  attempts integer := 0;
 begin
-  select count(*) into occupied
-  from public.account_profiles
-  where length(support_uid) = 6;
-
+  -- Serialize allocation to avoid collisions during concurrent signups.
+  perform pg_advisory_xact_lock(718204116);
+  select count(*) into occupied from public.account_profiles where length(support_uid) = 6;
   if occupied >= 900000 then
     loop
       candidate := (1000000 + floor(random() * 9000000)::bigint)::text;
-      exit when not exists (
-        select 1 from public.account_profiles where support_uid = candidate
-      );
+      exit when not exists (select 1 from public.account_profiles where support_uid = candidate);
     end loop;
     return candidate;
   end if;
-
   loop
     candidate := (100000 + floor(random() * 900000)::bigint)::text;
-    exit when not exists (
-      select 1 from public.account_profiles where support_uid = candidate
-    );
-    attempts := attempts + 1;
-    if attempts >= 10000 then
-      -- Extremely unlikely under normal usage; still avoid collisions.
-      candidate := (1000000 + floor(random() * 9000000)::bigint)::text;
-      if not exists (select 1 from public.account_profiles where support_uid = candidate) then
-        return candidate;
-      end if;
-      attempts := 0;
-    end if;
+    exit when not exists (select 1 from public.account_profiles where support_uid = candidate);
   end loop;
   return candidate;
 end;
