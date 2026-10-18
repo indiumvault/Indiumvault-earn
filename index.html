@@ -20,8 +20,8 @@
 <form id="adminTaskForm" class="admin-form">
 <input id="adminTaskId" type="hidden">
 <label for="adminTaskTitle">Task title</label><input id="adminTaskTitle" maxlength="100" minlength="3" required>
-<label for="adminTaskDescription">Instructions</label><textarea id="adminTaskDescription" maxlength="2000" rows="3"></textarea>
-<div class="admin-form-row"><div><label for="adminTaskCategory">Category</label><input id="adminTaskCategory" maxlength="50" value="general"></div><div><label for="adminTaskPoints">Points</label><input id="adminTaskPoints" type="number" min="0" max="100000" value="10" required></div></div>
+<label for="adminTaskDescription">Instructions</label><textarea id="adminTaskDescription" maxlength="2000" rows="3" required></textarea>
+<div class="admin-form-row"><div><label for="adminTaskCategory">Category</label><input id="adminTaskCategory" maxlength="40" value="general" required></div><div><label for="adminTaskPoints">Points</label><input id="adminTaskPoints" type="number" min="0" max="100000" value="10" required></div></div>
 <label for="adminTaskUrl">Destination URL (optional)</label><input id="adminTaskUrl" type="url" maxlength="1000" placeholder="https://…">
 <label class="checkline"><input id="adminTaskActive" type="checkbox" checked> Publish task</label>
 <div class="admin-form-actions"><button class="okay" type="submit">Save task</button><button id="adminTaskReset" class="secondary-btn" type="button">Clear</button></div>
@@ -32,8 +32,8 @@
 <form id="adminRewardForm" class="admin-form">
 <input id="adminRewardId" type="hidden">
 <label for="adminRewardTitle">Reward title</label><input id="adminRewardTitle" maxlength="100" minlength="2" required>
-<label for="adminRewardDescription">Description / fulfilment terms</label><textarea id="adminRewardDescription" maxlength="2000" rows="3"></textarea>
-<div class="admin-form-row"><div><label for="adminRewardCost">Points cost</label><input id="adminRewardCost" type="number" min="1" max="1000000" value="50" required></div><div><label for="adminRewardType">Type</label><select id="adminRewardType"><option value="digital_item">Digital item</option><option value="gift_card">Gift card</option><option value="demo">Demo</option><option value="other">Other</option></select></div></div>
+<label for="adminRewardDescription">Description / fulfilment terms</label><textarea id="adminRewardDescription" maxlength="2000" rows="3" required></textarea>
+<div class="admin-form-row"><div><label for="adminRewardCost">Points cost</label><input id="adminRewardCost" type="number" min="1" max="10000000" value="50" required></div><div><label for="adminRewardType">Type</label><select id="adminRewardType"><option value="digital_item">Digital item</option><option value="gift_card">Gift card</option><option value="demo">Demo</option><option value="other">Other</option></select></div></div>
 <label class="checkline"><input id="adminRewardActive" type="checkbox" checked> Show in catalogue</label>
 <div class="admin-form-actions"><button class="okay" type="submit">Save reward</button><button id="adminRewardReset" class="secondary-btn" type="button">Clear</button></div>
 </form><div id="adminRewardList" class="admin-list"></div>
