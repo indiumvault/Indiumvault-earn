@@ -1,7 +1,7 @@
 const $=id=>document.getElementById(id);
 const authDialog=$('authDialog');
 let authMode='signin',authClient=null,currentUser=null;
-const TURNSTILE_SITE_KEY='0x4AAAAAAAFaDQZBR9p8we11X';
+const TURNSTILE_SITE_KEY='0x4AAAAAAFaLnmNCXFgW9MWA';
 let turnstileWidgetId=null,captchaToken=null,turnstileLoading=null;
 function resetCaptcha(){captchaToken=null;if(window.turnstile&&turnstileWidgetId!==null){try{window.turnstile.reset(turnstileWidgetId)}catch(e){console.warn('Turnstile reset failed',e)}}}
 function ensureTurnstile(){
