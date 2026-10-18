@@ -7,9 +7,43 @@ function resetCaptcha(){captchaToken=null;if(window.turnstile&&turnstileWidgetId
 function ensureTurnstile(){
  const container=$('turnstile-container');
  if(!container)return;
- if(window.turnstile){if(turnstileWidgetId===null){turnstileWidgetId=window.turnstile.render(container,{sitekey:TURNSTILE_SITE_KEY,callback:token=>{captchaToken=token;setAuthMessage('')},'expired-callback':()=>{captchaToken=null;setAuthMessage('Security check expired. Please complete it again.',true)},'error-callback':()=>{captchaToken=null;setAuthMessage('Security check could not load. Refresh and try again.',true)}})}return}
- if(!turnstileLoading){turnstileLoading=new Promise((resolve,reject)=>{const existing=document.querySelector('script[data-turnstile-api]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.defer=true;s.dataset.turnstileApi='true';s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
- turnstileLoading.then(()=>ensureTurnstile()).catch(()=>setAuthMessage('Could not load the security check. Please refresh and try again.',true));
+ if(window.turnstile){
+  if(turnstileWidgetId===null){
+   try{
+    turnstileWidgetId=window.turnstile.render(container,{
+     sitekey:TURNSTILE_SITE_KEY,
+     callback:token=>{captchaToken=token;setAuthMessage('')},
+     'expired-callback':()=>{captchaToken=null;setAuthMessage('Security check expired. Please complete it again.',true)},
+     'error-callback':code=>{captchaToken=null;turnstileWidgetId=null;console.error('Cloudflare Turnstile error code:',code);setAuthMessage('Security check failed'+(code?' (code '+code+')':'')+'. Check the Turnstile site key and allowed hostname, then refresh.',true)}
+    });
+   }catch(error){
+    turnstileWidgetId=null;captchaToken=null;console.error('Turnstile render failed:',error);
+    setAuthMessage('Security check could not start. Check the Turnstile site key and allowed hostname, then refresh.',true);
+   }
+  }
+  return;
+ }
+ if(!turnstileLoading){
+  turnstileLoading=new Promise((resolve,reject)=>{
+   const existing=document.querySelector('script[data-turnstile-api]');
+   if(existing){
+    if(existing.dataset.loaded==='true'){resolve();return}
+    existing.addEventListener('load',resolve,{once:true});
+    existing.addEventListener('error',reject,{once:true});
+    return;
+   }
+   const s=document.createElement('script');
+   s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+   s.async=true;s.defer=true;s.dataset.turnstileApi='true';
+   s.onload=()=>{s.dataset.loaded='true';resolve()};
+   s.onerror=()=>reject(new Error('Turnstile script request failed'));
+   document.head.appendChild(s);
+  });
+ }
+ turnstileLoading.then(()=>ensureTurnstile()).catch(error=>{
+  turnstileLoading=null;captchaToken=null;console.error('Turnstile script failed to load:',error);
+  setAuthMessage('Could not download Cloudflare security check. Open the site in Chrome, disable content blockers for this site, and refresh.',true);
+ });
 }
 function requireCaptchaToken(){if(!captchaToken)throw new Error('Complete the security check before continuing.');return captchaToken;}
 let activeTasks=[],activeRewards=[],submissions=[],userRedemptions=[];
