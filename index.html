@@ -6,9 +6,33 @@
 <section class="intro"><p class="eyebrow">YOUR REWARDS HUB</p><h1>Earn a little.<br><span>Unlock more.</span></h1><p class="muted">Discover tasks, track points, and explore rewards.</p></section>
 <section class="balance"><div class="balance-head"><span>Points balance</span><b>ACCOUNT</b></div><div class="amount"><span id="points">0</span> <small>pts</small></div><div class="balance-foot"><span id="balanceFoot">Your verified account points</span><button id="activity">Activity ↗</button></div></section>
 <section class="stats"><div><b id="count">0</b><small>Submissions</small></div><div><b id="rewardCount">0</b><small>Available rewards</small></div><div><b>—</b><small>Referrals</small></div></section>
-<section class="section admin-panel" id="adminPanel" hidden><div class="heading"><div><p class="eyebrow">PRIVATE CONTROLS</p><h2>Task review</h2></div><small>Administrator only</small></div><p class="muted">Review proof before approving points. Approval is recorded once.</p><div id="adminSubmissions"><p class="muted">Checking administrator access…</p></div><p id="adminMessage" class="auth-message" role="status" aria-live="polite"></p></section>
+<section class="section admin-panel" id="adminPanel" hidden>
+<div class="heading"><div><p class="eyebrow">PRIVATE CONTROLS</p><h2>Admin workspace</h2></div><small>Administrator only</small></div>
+<p class="muted">Create and publish tasks, manage rewards, review task proof, and process redemption requests. Only enable rewards you can actually fulfil.</p>
+<p id="adminMessage" class="auth-message" role="status" aria-live="polite"></p>
+<div class="admin-tool"><div class="heading"><div><p class="eyebrow">01 / TASKS</p><h2 id="taskFormHeading">Create a task</h2></div><small>0–100,000 pts</small></div>
+<form id="adminTaskForm" class="admin-form"><input id="taskEditId" type="hidden">
+<label for="taskTitle">Task title</label><input id="taskTitle" required minlength="3" maxlength="100" placeholder="e.g. Write a short product review">
+<label for="taskDescription">Instructions</label><textarea id="taskDescription" rows="3" maxlength="2000" required placeholder="Explain exactly what the user must do and what proof is acceptable."></textarea>
+<div class="admin-form-row"><div><label for="taskCategory">Category</label><input id="taskCategory" required minlength="2" maxlength="40" value="general" placeholder="general"></div><div><label for="taskPoints">Points</label><input id="taskPoints" type="number" required min="0" max="100000" step="1" value="10"></div></div>
+<label for="taskUrl">Task link (optional)</label><input id="taskUrl" type="url" maxlength="1000" placeholder="https://…">
+<label class="checkline"><input id="taskActive" type="checkbox"> Publish task for users immediately</label>
+<div class="admin-form-actions"><button class="okay" id="taskSave" type="submit">Save task</button><button class="secondary-btn" id="taskReset" type="button">Clear</button></div></form>
+<div id="adminTaskList" class="admin-list"><p class="muted">Loading tasks…</p></div></div>
+<div class="admin-tool"><div class="heading"><div><p class="eyebrow">02 / REWARDS</p><h2 id="rewardFormHeading">Create a reward</h2></div><small>Points only</small></div>
+<p class="muted">Redemption requests deduct points when submitted. Rejected requests are refunded. Nothing is automatically paid or delivered.</p>
+<form id="adminRewardForm" class="admin-form"><input id="rewardEditId" type="hidden">
+<label for="rewardTitle">Reward title</label><input id="rewardTitle" required minlength="2" maxlength="100" placeholder="e.g. Profile badge">
+<label for="rewardDescription">Description and fulfilment terms</label><textarea id="rewardDescription" rows="3" maxlength="2000" required placeholder="Be clear about what the user receives, limits, and expected fulfilment."></textarea>
+<div class="admin-form-row"><div><label for="rewardCost">Points cost</label><input id="rewardCost" type="number" required min="1" max="10000000" step="1" value="100"></div><div><label for="rewardType">Reward type</label><select id="rewardType"><option value="demo">Demo / digital item</option><option value="gift_card">Gift card (manual fulfilment)</option><option value="other">Other</option></select></div></div>
+<label class="checkline"><input id="rewardActive" type="checkbox"> Make available for redemption</label>
+<div class="admin-form-actions"><button class="okay" id="rewardSave" type="submit">Save reward</button><button class="secondary-btn" id="rewardReset" type="button">Clear</button></div></form>
+<div id="adminRewardList" class="admin-list"><p class="muted">Loading rewards…</p></div></div>
+<div class="admin-tool"><div class="heading"><div><p class="eyebrow">03 / SUBMISSIONS</p><h2>Task review</h2></div><small>Approve verified work only</small></div><div id="adminSubmissions"><p class="muted">Checking administrator access…</p></div></div>
+<div class="admin-tool"><div class="heading"><div><p class="eyebrow">04 / REDEMPTIONS</p><h2>Reward requests</h2></div><small>Manual review</small></div><div id="adminRedemptions"><p class="muted">Loading redemption requests…</p></div></div>
+</section>
 <section class="section" id="tasks"><div class="heading"><div><p class="eyebrow">GET STARTED</p><h2>Available tasks</h2></div><small id="taskMeta">Live tasks</small></div><div id="taskList"><p class="muted">Sign in to load available tasks.</p></div></section>
-<section class="section" id="rewards"><div class="heading"><div><p class="eyebrow">REDEEM LATER</p><h2>Rewards</h2></div><small>Availability varies</small></div><div id="rewardList" class="rewards"><p class="muted">Sign in to load rewards.</p></div></section>
+<section class="section" id="rewards"><div class="heading"><div><p class="eyebrow">REDEEM LATER</p><h2>Rewards</h2></div><small>Availability varies</small></div><div id="rewardList" class="rewards"><p class="muted">Sign in to load rewards.</p></div><p id="rewardMessage" class="auth-message" role="status" aria-live="polite"></p><div class="my-redemptions"><h3>Your redemption history</h3><div id="myRedemptions"><p class="muted">Sign in to view your requests.</p></div></div></section>
 <section class="referral"><p class="eyebrow">GROW TOGETHER</p><h2>Invite your people</h2><p class="muted">Referral rewards can be added after anti-abuse checks are ready.</p><button id="copy">Referral setup</button><p id="copyMessage" aria-live="polite"></p></section>
 <p class="notice"><b>Important:</b> Only tasks published by the site administrator appear here. Points are awarded only after verified review. Rewards and payouts are not available unless explicitly enabled and funded. Never pay a fee to unlock a reward.</p></main>
 <nav><a href="#">⌂<small>Home</small></a><a href="#tasks">✦<small>Tasks</small></a><a href="#rewards">◇<small>Rewards</small></a><button id="withdraw">↗<small>Withdraw</small></button></nav></div>
