@@ -48,3 +48,15 @@
 button:disabled{cursor:not-allowed}
 @media(max-width:520px){.rewards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.rewards article{padding:13px 11px}.rewards article b{font-size:12px}.rewards article p{font-size:10px}.rewards article .redeem-btn{font-size:10px}.stats{margin-bottom:27px}.balance{padding:18px}.amount{font-size:39px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* Offerwall onboarding state — deliberately non-interactive until provider verification is complete */
+.offerwall-panel{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:25px;padding:19px;border:1px solid #4c7f8c70;border-radius:19px;background:radial-gradient(ellipse at 100% 0%,#1c465044,transparent 48%),linear-gradient(120deg,#151f31,#121522);overflow:hidden}
+.offerwall-copy{min-width:0}
+.offerwall-panel h2{font:600 22px 'Space Grotesk',sans-serif;letter-spacing:-.5px;margin:0 0 9px}
+.offerwall-panel .muted{max-width:480px;margin:0}
+.offerwall-icon{width:46px;height:46px;display:grid;place-items:center;border:1px solid #70d7e54a;border-radius:15px;background:#67e8f915;color:var(--cyan);font-size:23px}
+.offerwall-status{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:7px 10px;border:1px solid #8e80ff40;border-radius:99px;color:#d7d1ff;font-size:10px;font-weight:700}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#f0c879;box-shadow:0 0 0 4px #f0c87918}
+.offerwall-note{grid-column:1/-1;margin:5px 0 0;padding-top:12px;border-top:1px solid #ffffff12;color:#8f97b1;font-size:10px;line-height:1.55}
+@media(max-width:390px){.offerwall-panel{padding:15px;grid-template-columns:minmax(0,1fr) 38px}.offerwall-panel h2{font-size:19px}.offerwall-icon{width:38px;height:38px;border-radius:12px}}
