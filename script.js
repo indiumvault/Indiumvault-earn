@@ -127,7 +127,8 @@ function adminMessage(message,isError=false){const el=$('adminMessage');if(!el)r
 async function loadAdminReview(){
  const panel=$('adminPanel');
  if(!panel||!authClient||!currentUser){if(panel)panel.hidden=true;return}
- const {error}=await authClient.rpc('admin_list_pending_submissions');
+ // Use the same admin-only account lookup RPC that powers this panel.
+ const {error}=await authClient.rpc('admin_lookup_account_by_uid',{p_support_uid:'__admin_check__'});
  panel.hidden=!!error;
  if(error)console.warn('Admin panel access unavailable:',error.message);
 }
