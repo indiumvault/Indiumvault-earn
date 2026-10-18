@@ -130,6 +130,7 @@ function loadAdminReview(){
  // Keep the UID lookup panel visible for signed-in troubleshooting. The
  // database RPC independently enforces admin identity before returning data.
  panel.hidden=!currentUser;
+ if(currentUser&&typeof refreshAdminConsole==='function')refreshAdminConsole().catch(error=>adminMessage(error.message||'Admin tools unavailable.',true));
 }
 
 
