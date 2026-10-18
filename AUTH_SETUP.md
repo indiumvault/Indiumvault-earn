@@ -13,9 +13,9 @@ The website is hosted as a static GitHub Pages site. Supabase Auth provides emai
 3. Replace `PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE` with the publishable/anon key.
 4. Commit the change to the **Indiumvault-earn** repository only.
 5. In Supabase, open **Authentication → URL Configuration**. Set the Site URL to:
-   `https://indiumvault.github.io`
+   `https://indiumvault.github.io/Indiumvault-earn/`
 6. Add this Redirect URL:
-   `https://indiumvault.github.io/Indiumvault-earn/**`
+   `https://indiumvault.github.io/Indiumvault-earn/`
 7. In **Authentication → Sign In / Providers**, ensure Email is enabled. Keep email verification enabled if available.
 
 ## 3. Test
