@@ -1,7 +1,7 @@
 const $=id=>document.getElementById(id);
 const authDialog=$('authDialog');
 let authMode='signin',authClient=null,currentUser=null;
-let activeTasks=[],activeRewards=[],submissions=[];
+let activeTasks=[],activeRewards=[],submissions=[],userRedemptions=[];
 const authConfig=window.INDIUMVAULT_SUPABASE;
 const isConfigured=authConfig&&typeof authConfig.url==='string'&&typeof authConfig.anonKey==='string'&&authConfig.url.startsWith('https://')&&!authConfig.url.includes('YOUR_PROJECT')&&authConfig.anonKey.length>20&&!authConfig.anonKey.includes('PASTE_');
 function show(title,message){$('dialogTitle').textContent=title;$('dialogText').textContent=message;if($('dialog').showModal)$('dialog').showModal();else alert(title+'\\n\\n'+message)}
@@ -10,7 +10,7 @@ function renderAuth(){const signedIn=!!currentUser;$('authStatus').textContent=s
 function openAuth(){setAuthMessage('');if(!isConfigured||!window.supabase){setAuthMessage('Authentication is not connected yet. Check config.js and AUTH_SETUP.md.',true)}renderAuth();if(authDialog.showModal)authDialog.showModal();else alert('Please open this site in a modern browser to use the account dialog.')}
 function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 async function loadAccountData(){
- if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];renderMyRedemptions([]);$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
+ if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];userRedemptions=[];renderMyRedemptions([]);$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
  $('taskList').innerHTML='<p class="muted">Loading tasks…</p>';$('rewardList').innerHTML='<p class="muted">Loading rewards…</p>';
  const [ledgerResult,taskResult,rewardResult,submissionResult,redemptionResult]=await Promise.all([
   authClient.from('points_ledger').select('amount').eq('user_id',currentUser.id),
@@ -22,9 +22,9 @@ async function loadAccountData(){
  const err=[ledgerResult,taskResult,rewardResult,submissionResult,redemptionResult].find(x=>x.error);
  if(err){console.error('Account data load failed:',err.error);$('taskList').innerHTML='<p class="muted">Could not load account data. Please refresh and try again.</p>';$('rewardList').innerHTML='<p class="muted">Rewards could not be loaded.</p>';return}
  $('points').textContent=(ledgerResult.data||[]).reduce((sum,row)=>sum+Number(row.amount||0),0).toLocaleString('en-IN');
- submissions=submissionResult.data||[];activeTasks=taskResult.data||[];activeRewards=rewardResult.data||[];
+ submissions=submissionResult.data||[];activeTasks=taskResult.data||[];activeRewards=rewardResult.data||[];userRedemptions=redemptionResult.data||[];
  $('count').textContent=submissions.length;$('rewardCount').textContent=activeRewards.length;$('balanceFoot').textContent='Verified account points · no guaranteed cash value';
- renderTasks();renderRewards();renderMyRedemptions(redemptionResult.data||[]);await loadAdminReview();
+ renderTasks();renderRewards();renderMyRedemptions(userRedemptions);await loadAdminReview();
 }
 let selectedTaskForSubmission=null;
 function renderTasks(){
@@ -39,7 +39,7 @@ $('submitTaskForm').addEventListener('submit',async event=>{event.preventDefault
 function renderRewards(){
  const list=$('rewardList');
  if(!activeRewards.length){list.innerHTML='<p class="muted">No rewards are currently available. Check back later.</p>';return}
- list.innerHTML=activeRewards.map(reward=>'<article><span>◇</span><b>'+escapeHtml(reward.title)+'</b><p>'+escapeHtml(reward.description||'')+'</p><p class="reward-cost">'+Number(reward.points_cost).toLocaleString('en-IN')+' points · '+escapeHtml(reward.reward_type==='gift_card'?'Manual gift-card fulfilment':reward.reward_type)+'</p><button type="button" class="redeem-btn" data-redeem="'+escapeHtml(reward.id)+'">'+(currentUser?'Request reward':'Sign in to request')+'</button></article>').join('');
+ list.innerHTML=activeRewards.map(reward=>'<article><span>◇</span><b>'+escapeHtml(reward.title)+'</b><p>'+escapeHtml(reward.description||'')+'</p><p class="reward-cost">'+Number(reward.points_cost).toLocaleString('en-IN')+' points · '+escapeHtml(reward.reward_type==='gift_card'?'Manual gift-card fulfilment':reward.reward_type)+'</p><button type="button" class="redeem-btn" data-redeem="'+escapeHtml(reward.id)+'" '+(userRedemptions.some(row=>row.reward_id===reward.id&&row.status==='pending')?'disabled':'')+'>'+(userRedemptions.some(row=>row.reward_id===reward.id&&row.status==='pending')?'Pending review':currentUser?'Request reward':'Sign in to request')+'</button></article>').join('');
  list.querySelectorAll('[data-redeem]').forEach(button=>button.addEventListener('click',async()=>{
   if(!currentUser){openAuth();setAuthMessage('Sign in to request a reward.');return}
   const reward=activeRewards.find(r=>r.id===button.dataset.redeem);if(!reward)return;
