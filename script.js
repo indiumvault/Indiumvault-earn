@@ -178,3 +178,39 @@ $('adminTaskReset')?.addEventListener('click',()=>{$('adminTaskForm').reset();$(
 $('adminRewardReset')?.addEventListener('click',()=>{$('adminRewardForm').reset();$('adminRewardId').value='';$('adminRewardCost').value='50';$('adminRewardActive').checked=true});
 $('adminTaskForm')?.addEventListener('submit',async event=>{event.preventDefault();if(!authClient||!currentUser)return;const url=$('adminTaskUrl').value.trim();if(url){try{const parsed=new URL(url);if(!['https:','http:'].includes(parsed.protocol))throw Error();}catch{$('adminMessage').textContent='Enter a valid http or https destination URL.';$('adminMessage').classList.add('error');return}}const button=$('adminTaskForm').querySelector('[type=submit]');button.disabled=true;try{const {error}=await authClient.rpc('admin_save_task',{p_task_id:$('adminTaskId').value||null,p_title:$('adminTaskTitle').value.trim(),p_description:$('adminTaskDescription').value.trim(),p_category:$('adminTaskCategory').value.trim()||'general',p_points:Number($('adminTaskPoints').value),p_destination_url:url||null,p_is_active:$('adminTaskActive').checked});if(error)throw error;adminMessage('Task saved.');$('adminTaskReset').click();await refreshAdminConsole();await loadAccountData()}catch(e){adminMessage(e.message||'Could not save task.',true)}finally{button.disabled=false}});
 $('adminRewardForm')?.addEventListener('submit',async event=>{event.preventDefault();if(!authClient||!currentUser)return;const button=$('adminRewardForm').querySelector('[type=submit]');button.disabled=true;try{const {error}=await authClient.rpc('admin_save_reward',{p_reward_id:$('adminRewardId').value||null,p_title:$('adminRewardTitle').value.trim(),p_description:$('adminRewardDescription').value.trim(),p_points_cost:Number($('adminRewardCost').value),p_reward_type:$('adminRewardType').value,p_is_active:$('adminRewardActive').checked});if(error)throw error;adminMessage('Reward saved. Requests are manually fulfilled; this does not enable payouts.');$('adminRewardReset').click();await refreshAdminConsole();await loadAccountData()}catch(e){adminMessage(e.message||'Could not save reward.',true)}finally{button.disabled=false}});
+
+
+/* Separate page views for the GitHub Pages site */
+(function setupPageRoutes(){
+ const path=window.location.pathname.toLowerCase();
+ const page=path.endsWith('/tasks.html')?'tasks':path.endsWith('/rewards.html')?'rewards':path.endsWith('/withdrawal.html')?'withdrawal':'home';
+ const main=document.querySelector('main');
+ if(!main)return;
+ const visibleByPage={
+  home:['intro','balance','stats','adminPanel','offers','referral',''],
+  tasks:['intro','balance','adminPanel','tasks','notice'],
+  rewards:['intro','balance','adminPanel','rewards','notice'],
+  withdrawal:['intro','balance','adminPanel','withdrawal','notice']
+ };
+ const allowed=new Set(visibleByPage[page]);
+ [...main.children].forEach(el=>{
+  const id=el.id||'';
+  el.classList.toggle('page-route-hidden',!allowed.has(id));
+  if(id==='tasks'||id==='rewards')el.hidden=page!==id;
+ });
+ document.querySelectorAll('[data-page-link]').forEach(link=>{
+  const active=link.dataset.pageLink===page;
+  link.classList.toggle('nav-active',active);
+  if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+ });
+ const titles={home:['YOUR REWARDS HUB','Earn a little.','Unlock more.','Discover tasks, track points, and explore rewards.'],tasks:['COMPLETE & SUBMIT','Tasks','Earn points.','Tasks published by the platform will appear here when available.'],rewards:['YOUR CATALOGUE','Rewards','Redeem carefully.','Review reward terms before making a request.'],withdrawal:['POINTS WALLET','Withdrawals','Clear terms.','See the current status of cash withdrawals.']};
+ const t=titles[page],intro=document.querySelector('.intro');
+ if(intro&&page!=='home'){
+  const eyebrow=intro.querySelector('.eyebrow'),heading=intro.querySelector('h1'),desc=intro.querySelector('.muted');
+  if(eyebrow)eyebrow.textContent=t[0];
+  if(heading)heading.innerHTML=t[1]+'<br><span>'+t[2]+'</span>';
+  if(desc)desc.textContent=t[3];
+ }
+ const more=document.getElementById('withdraw');
+ if(more)more.addEventListener('click',()=>{if(authDialog&&authDialog.showModal)authDialog.showModal();else if(authDialog)authDialog.setAttribute('open','')});
+})();
