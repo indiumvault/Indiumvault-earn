@@ -5,7 +5,7 @@
 <main>
 <section class="intro"><p class="eyebrow">YOUR REWARDS HUB</p><h1>Earn a little.<br><span>Unlock more.</span></h1><p class="muted">Discover tasks, track points, and explore rewards.</p></section>
 <section class="balance"><div class="balance-head"><span>Points balance</span><b>ACCOUNT</b></div><div class="amount"><span id="points">0</span> <small>pts</small></div><div class="balance-foot"><span id="balanceFoot">Your verified account points</span><button id="activity">Activity ↗</button></div></section>
-<section class="stats"><div><b id="count">0</b><small>Submissions</small></div><div><b id="rewardCount">0</b><small>Available rewards</small></div><div><b id="referralStat">—</b><small>Referrals</small></div></section>
+<section class="stats"><div><b>Coming soon</b><small>Verified offers</small></div><div><b>Manual</b><small>Account support</small></div><div><b id="referralStat">—</b><small>Referrals</small></div></section>
 <section class="section admin-panel" id="adminPanel" hidden>
 <div class="heading"><div><p class="eyebrow">PRIVATE CONTROLS</p><h2>Account support</h2></div><small>Administrator only</small></div>
 <p class="muted">Find an account using its numeric support UID. Account lookup is restricted to the administrator.</p>
@@ -40,11 +40,11 @@
 </div>
 </section>
 <section class="offerwall-panel" id="offers"><div class="offerwall-copy"><p class="eyebrow">THIRD-PARTY OFFERS</p><h2>Offerwalls are on the way</h2><p class="muted">We’re preparing verified partner offers. This section will open only after provider approval, website verification, and secure credit tracking are complete.</p><div class="offerwall-status"><span class="status-dot"></span> Setup in progress</div></div><div class="offerwall-icon" aria-hidden="true">✦</div><p class="offerwall-note">Never pay a fee to access an offer. Eligible offers and rewards may vary by country and provider rules.</p></section>
-<section class="section" id="tasks"><div class="heading"><div><p class="eyebrow">GET STARTED</p><h2>Available tasks</h2></div><small id="taskMeta">Live tasks</small></div><div id="taskList"><p class="muted">Sign in to load available tasks.</p></div></section>
-<section class="section" id="rewards"><div class="heading"><div><p class="eyebrow">REDEEM LATER</p><h2>Rewards</h2></div><small>Availability varies</small></div><div id="rewardList" class="rewards"><p class="muted">Sign in to load rewards.</p></div><p id="rewardMessage" class="auth-message" role="status" aria-live="polite"></p><div class="my-redemptions"><h3>Your redemption history</h3><div id="myRedemptions"><p class="muted">Sign in to view your requests.</p></div></div></section>
+
+
 <section class="referral"><p class="eyebrow">GROW TOGETHER</p><h2>Invite your people</h2><p class="muted">Referral rewards can be added after anti-abuse checks are ready.</p><button id="copy">Referral setup</button><p id="copyMessage" aria-live="polite"></p></section>
 <p class="notice"><b>Important:</b> Only tasks published by the administrator appear here. Points are awarded after review and have no guaranteed cash value. Reward requests are manually reviewed; cash withdrawals and automatic gift-card payouts are not enabled. Never pay a fee to unlock a reward.</p></main>
-<nav><a href="#">⌂<small>Home</small></a><a href="#offers">✧<small>Offers</small></a><a href="#tasks">✦<small>Tasks</small></a><a href="#rewards">◇<small>Rewards</small></a><button id="withdraw">↗<small>Withdraw</small></button></nav></div>
+<nav><a href="#">⌂<small>Home</small></a><a href="#offers">✧<small>Offers</small></a><button id="activity">◷<small>Activity</small></button><button id="copy">↗<small>Referrals</small></button><button id="withdraw">↗<small>Withdraw</small></button></nav></div>
 <dialog id="dialog"><button class="close" id="close">×</button><p class="eyebrow">INDIUMVAULT EARN</p><h2 id="dialogTitle">Information</h2><p id="dialogText" class="muted"></p><button class="okay" id="okay">Got it</button></dialog>
 <dialog id="authDialog"><button class="close" id="authClose" aria-label="Close account dialog">×</button><p class="eyebrow">YOUR ACCOUNT</p><h2 id="authTitle">Sign in</h2><p id="authIntro" class="muted">Sign in to your IndiumVault Earn account.</p><div id="profilePanel" class="profile-panel" hidden>
 <div class="profile-banner"><span class="profile-avatar" id="profileInitial">U</span><div><b id="profileDisplayName">Your profile</b><small id="profileEmail">email</small></div></div>
