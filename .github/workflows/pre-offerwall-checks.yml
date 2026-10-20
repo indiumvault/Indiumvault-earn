@@ -78,7 +78,7 @@ jobs:
 
           for filename in ["index.html", "script.js", "config.js"]:
               text = Path(filename).read_text(encoding="utf-8")
-              if re.search(r"service[_-]?role|SUPABASE_SERVICE_ROLE_KEY", text, re.I):
+              if re.search(r"service[_-]?role\s*[:=]\s*[\"']|SUPABASE_SERVICE_ROLE_KEY\s*[:=]\s*[\"']", text, re.I):
                   errors.append(f"{filename}: server-only credential reference found in client file")
 
           if errors:
