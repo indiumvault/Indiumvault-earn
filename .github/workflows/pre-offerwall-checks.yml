@@ -1,0 +1,88 @@
+name: Pre-offerwall smoke checks
+
+on:
+  push:
+    branches: [main, chore/pre-offerwall-smoke-checks]
+  pull_request:
+    branches: [main]
+
+jobs:
+  static-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: node --check script.js
+      - name: Check static pages and client configuration
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+
+          pages = ["index.html", "tasks.html", "rewards.html", "withdrawal.html"]
+          required_ids = {
+              "authStatus", "profile", "points", "adminPanel", "taskList",
+              "rewardList", "authDialog", "authForm", "authSubmit",
+              "adminTaskForm", "adminRewardForm", "adminRefresh",
+              "moreNav", "moreDialog", "submitTaskDialog", "submitTaskForm",
+          }
+
+          class PageParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids = []
+                  self.links = []
+                  self.scripts = []
+                  self.styles = []
+                  self.bad_blank_links = []
+              def handle_starttag(self, tag, attrs):
+                  a = dict(attrs)
+                  if "id" in a:
+                      self.ids.append(a["id"])
+                  if tag == "a":
+                      self.links.append(a)
+                      if a.get("target") == "_blank":
+                          rel = set(a.get("rel", "").lower().split())
+                          if not {"noopener", "noreferrer"}.issubset(rel):
+                              self.bad_blank_links.append(a.get("href", "(no href)"))
+                  if tag == "script" and a.get("src"):
+                      self.scripts.append(a["src"])
+                  if tag == "link" and a.get("rel") == "stylesheet":
+                      self.styles.append(a.get("href", ""))
+
+          errors = []
+          for filename in pages:
+              path = Path(filename)
+              if not path.exists():
+                  errors.append(f"{filename}: missing page")
+                  continue
+              parser = PageParser()
+              parser.feed(path.read_text(encoding="utf-8"))
+              duplicates = sorted({item for item in parser.ids if parser.ids.count(item) > 1})
+              missing = sorted(required_ids - set(parser.ids))
+              if duplicates:
+                  errors.append(f"{filename}: duplicate IDs: {duplicates}")
+              if missing:
+                  errors.append(f"{filename}: missing required IDs: {missing}")
+              if "script.js" not in " ".join(parser.scripts):
+                  errors.append(f"{filename}: script.js is not loaded")
+              if not any("style.css" in href for href in parser.styles):
+                  errors.append(f"{filename}: style.css is not loaded")
+              if parser.bad_blank_links:
+                  errors.append(f"{filename}: target=_blank links missing noopener/noreferrer: {parser.bad_blank_links}")
+              for destination in ["index.html", "tasks.html", "rewards.html", "withdrawal.html"]:
+                  if not any(a.get("href") == destination and a.get("data-page-link") for a in parser.links):
+                      errors.append(f"{filename}: missing navigation link to {destination}")
+
+          for filename in ["index.html", "script.js", "config.js"]:
+              text = Path(filename).read_text(encoding="utf-8")
+              if re.search(r"service[_-]?role|SUPABASE_SERVICE_ROLE_KEY", text, re.I):
+                  errors.append(f"{filename}: server-only credential reference found in client file")
+
+          if errors:
+              print("\n".join("ERROR: " + e for e in errors))
+              raise SystemExit(1)
+          print("Static smoke checks passed for all four pages.")
+          PY
