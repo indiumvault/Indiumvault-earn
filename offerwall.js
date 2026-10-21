@@ -73,17 +73,23 @@
       }
       frame.onload = () => {
         if (lastUserId !== session.user.id) return;
+        frame.style.visibility = "visible";
         placeholder.hidden = true;
-        frame.hidden = false;
         button.hidden = false;
         setStatus("Partner offers loaded", "ready");
         message.classList.remove("error");
         message.textContent = "Browse the live partner feed below. The secure link expires after one hour.";
       };
+      // Remove the hidden attribute before assigning src. A hidden lazy iframe may never
+      // start loading, which would prevent its own onload handler from ever showing it.
+      frame.hidden = false;
+      frame.style.visibility = "hidden";
       frame.src = target.toString();
       button.dataset.signedUrl = target.toString();
       fallbackTimer = window.setTimeout(() => {
         if (lastUserId === session.user.id && !placeholder.hidden) {
+          frame.hidden = true;
+          frame.style.visibility = "visible";
           button.hidden = false;
           placeholder.querySelector("b").textContent = "Having trouble loading offers?";
           placeholder.querySelector("p").textContent = "Open the partner feed in a full-screen page instead.";
