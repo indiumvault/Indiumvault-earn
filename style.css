@@ -111,3 +111,7 @@ nav a[data-page-link]{color:#858da8}nav a[data-page-link].nav-active,nav a[data-
 .offerwall-dashboard .offerwall-note{grid-column:1/-1}
 .offerwall-dashboard #openOfferwall{width:100%;margin-top:0}
 @media(max-width:520px){.offerwall-dashboard{padding:15px;gap:10px}.offerwall-feed-wrap,.offerwall-feed-placeholder{min-height:360px}#offerwallFrame{height:78vh;min-height:620px}.offerwall-categories span{font-size:10px;padding:8px 10px}}
+
+
+/* Admin panel temporarily hidden from the public website until the owner asks to show it again. */
+#adminPanel{display:none!important}
