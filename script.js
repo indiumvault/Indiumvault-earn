@@ -60,7 +60,7 @@ function openAuth(){setAuthMessage('');if(!isConfigured||!window.supabase){setAu
 function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function safeHttpUrl(value){try{const url=new URL(String(value??''));return url.protocol==='https:'||url.protocol==='http:'?url.href:''}catch{return ''}}
 async function loadAccountData(){
- if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];userRedemptions=[];renderMyRedemptions([]);$('points').textContent='0';$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
+ if(!authClient||!currentUser){if($('adminPanel'))$('adminPanel').hidden=true;activeTasks=[];activeRewards=[];submissions=[];userRedemptions=[];renderMyRedemptions([]);$('points').textContent='0';updateCryptoWithdrawalGate();$('count').textContent='0';$('rewardCount').textContent='0';$('taskList').innerHTML='<p class="muted">Sign in to see tasks available to your account.</p>';$('rewardList').innerHTML='<p class="muted">Sign in to see available rewards.</p>';$('balanceFoot').textContent='Sign in to view your account points';return}
  $('taskList').innerHTML='<p class="muted">Loading tasks…</p>';$('rewardList').innerHTML='<p class="muted">Loading rewards…</p>';
  const [ledgerResult,taskResult,rewardResult,submissionResult,redemptionResult]=await Promise.all([
   authClient.from('points_ledger').select('amount').eq('user_id',currentUser.id),
@@ -71,11 +71,38 @@ async function loadAccountData(){
  ]);
  const err=[ledgerResult,taskResult,rewardResult,submissionResult,redemptionResult].find(x=>x.error);
  if(err){console.error('Account data load failed:',err.error);$('taskList').innerHTML='<p class="muted">Could not load account data. Please refresh and try again.</p>';$('rewardList').innerHTML='<p class="muted">Rewards could not be loaded.</p>';return}
- $('points').textContent=(ledgerResult.data||[]).reduce((sum,row)=>sum+Number(row.amount||0),0).toLocaleString('en-IN');
+ $('points').textContent=(ledgerResult.data||[]).reduce((sum,row)=>sum+Number(row.amount||0),0).toLocaleString('en-IN');updateCryptoWithdrawalGate();
  submissions=submissionResult.data||[];activeTasks=taskResult.data||[];activeRewards=rewardResult.data||[];userRedemptions=redemptionResult.data||[];
  $('count').textContent=submissions.length;$('rewardCount').textContent=activeRewards.length;$('balanceFoot').textContent='Verified account points · no guaranteed cash value';
  renderTasks();renderRewards();renderMyRedemptions(userRedemptions);await loadAdminReview();
 }
+
+function updateCryptoWithdrawalGate(){
+ const pointsEl=$('withdrawalPoints'),progress=$('withdrawalProgress'),gate=$('withdrawalGateMessage');
+ const form=$('cryptoWithdrawalForm'),network=$('cryptoNetwork'),wallet=$('cryptoWalletAddress'),button=$('cryptoWithdrawButton');
+ if(!pointsEl||!form||!network||!wallet||!button||!gate)return;
+ const raw=$('points')?.textContent||'0';
+ const balance=Number(raw.replace(/,/g,''))||0;
+ const signedIn=!!currentUser;
+ const eligible=signedIn&&balance>=2500;
+ pointsEl.textContent=signedIn?balance.toLocaleString('en-IN')+' pts':'Sign in to check';
+ if(progress)progress.style.width=Math.min(100,(balance/2500)*100)+'%';
+ network.disabled=!eligible;wallet.disabled=!eligible;button.disabled=!eligible;
+ gate.classList.toggle('error',!eligible);
+ if(!signedIn)gate.textContent='Sign in to check your points. You need at least 2,500 points.';
+ else if(balance<2500)gate.textContent='You need '+(2500-balance).toLocaleString('en-IN')+' more points to unlock this section.';
+ else gate.textContent='Eligible: your balance meets the 2,500-point minimum. Payout processing is not live yet.';
+}
+$('cryptoWithdrawalForm')?.addEventListener('submit',event=>{
+ event.preventDefault();
+ const msg=$('cryptoWithdrawalMessage');
+ if(!currentUser){msg.textContent='Please sign in first.';msg.classList.add('error');return}
+ const balance=Number(($('points')?.textContent||'0').replace(/,/g,''))||0;
+ if(balance<2500){msg.textContent='You need at least 2,500 points to interact with this form.';msg.classList.add('error');updateCryptoWithdrawalGate();return}
+ msg.classList.add('error');
+ msg.textContent='Not submitted: crypto payouts are not configured yet. No withdrawal request was created and no funds will be sent.';
+});
+
 let selectedTaskForSubmission=null;
 function renderTasks(){
  const list=$('taskList');
