@@ -115,3 +115,11 @@ nav a[data-page-link]{color:#858da8}nav a[data-page-link].nav-active,nav a[data-
 
 /* Admin panel temporarily hidden from the public website until the owner asks to show it again. */
 #adminPanel{display:none!important}
+
+
+/* Keep the loading state layered over the embedded feed instead of pushing it below it. */
+.offerwall-feed-wrap{position:relative;isolation:isolate}
+.offerwall-feed-placeholder{position:absolute;inset:0;z-index:2;min-height:0;height:100%;background:#0d111c}
+#offerwallFrame{position:relative;z-index:1;width:100%;height:min(78vh,920px);min-height:640px;display:block}
+#offerwallFrame[hidden]{display:none!important}
+.offerwall-feed-placeholder[hidden]{display:none!important}
