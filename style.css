@@ -127,3 +127,21 @@ nav a[data-page-link]{color:#858da8}nav a[data-page-link].nav-active,nav a[data-
 
 /* The custom flex layout must not override the browser's hidden state for the offerwall placeholder. */
 .offerwall-feed-placeholder[hidden]{display:none!important}
+
+
+/* Crypto withdrawal preview card */
+.crypto-withdrawal-card{border-color:#4c7f8c70;background:radial-gradient(ellipse at 100% 0%,#1c465044,transparent 48%),linear-gradient(120deg,#151f31,#121522)}
+.crypto-payout-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0}
+.crypto-payout-head small{font-size:9px;letter-spacing:1.4px;color:var(--muted)}
+.crypto-payout-head h3{font:700 32px 'Space Grotesk',sans-serif;margin:5px 0 0;color:var(--green)}
+.crypto-pill{padding:7px 10px;border:1px solid #67e8f940;border-radius:99px;background:#67e8f912;color:var(--cyan);font-size:10px;font-weight:700;letter-spacing:1px}
+.crypto-rate{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff12;font-size:12px}
+.crypto-rate span{color:var(--muted)}.crypto-rate b{font-size:12px}
+.crypto-progress-track{height:7px;margin-top:15px;border-radius:99px;background:#ffffff12;overflow:hidden}
+.crypto-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#9c8dff,#67e8f9);transition:width .25s ease}
+.crypto-withdrawal-form{display:grid;gap:9px;margin-top:16px}
+.crypto-withdrawal-form label{font-size:11px;color:#c9cee2;margin-top:3px}
+.crypto-withdrawal-form input,.crypto-withdrawal-form select{width:100%;padding:12px;border:1px solid #343752;border-radius:10px;background:#0d101b;color:var(--text);font:inherit;font-size:12px;outline:none}
+.crypto-withdrawal-form input:disabled,.crypto-withdrawal-form select:disabled{opacity:.45;cursor:not-allowed}
+.crypto-withdrawal-form .okay:disabled{opacity:.42;filter:saturate(.4)}
+.crypto-withdrawal-card .auth-message{line-height:1.6}
