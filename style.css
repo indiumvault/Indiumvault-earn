@@ -319,3 +319,20 @@ nav{grid-template-columns:repeat(4,minmax(0,1fr))}
 /* Task page: make the task list visible and keep partner offers easy to find. */
 body.tasks-page main>.offerwall-dashboard{margin-top:18px}
 body.tasks-page main>.section#tasks{display:block}
+
+
+/* Current product has four destinations only; never show legacy rewards navigation. */
+nav{grid-template-columns:repeat(4,minmax(0,1fr))}
+nav a[data-page-link="rewards"],
+#moreDialog a[href="rewards.html"],
+.more-menu a[href="rewards.html"],
+.section#rewards{display:none!important}
+body.tasks-page main>.offerwall-dashboard{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start}
+body.tasks-page main>.offerwall-dashboard .offerwall-copy{min-width:0}
+body.tasks-page main>.offerwall-dashboard .offerwall-feed-wrap,
+body.tasks-page main>.offerwall-dashboard .offerwall-note{grid-column:1/-1}
+body.tasks-page main>.section#tasks{display:block}
+@media(max-width:520px){
+ body.tasks-page main>.offerwall-dashboard{display:grid;grid-template-columns:minmax(0,1fr)}
+ body.tasks-page main>.offerwall-dashboard .offerwall-icon{display:none}
+}
