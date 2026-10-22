@@ -231,7 +231,7 @@ $('adminRewardForm')?.addEventListener('submit',async event=>{event.preventDefau
  if(!main)return;
  const visibleByPage={
   home:['intro','balance','stats','adminPanel','offers','referral','notice'],
-  tasks:['intro','balance','adminPanel','tasks','notice'],
+  tasks:['intro','balance','adminPanel','offers','tasks','notice'],
   rewards:['intro','balance','adminPanel','rewards','notice'],
   withdrawal:['intro','balance','adminPanel','withdrawal','notice']
  };
@@ -246,7 +246,7 @@ $('adminRewardForm')?.addEventListener('submit',async event=>{event.preventDefau
   link.classList.toggle('nav-active',active);
   if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
  });
- const titles={home:['YOUR REWARDS HUB','Earn a little.','Unlock more.','Discover tasks, track points, and explore rewards.'],tasks:['COMPLETE & SUBMIT','Tasks','Earn points.','Tasks published by the platform will appear here when available.'],rewards:['YOUR CATALOGUE','Rewards','Redeem carefully.','Review reward terms before making a request.'],withdrawal:['POINTS WALLET','Withdrawals','Clear terms.','See the current status of cash withdrawals.']};
+ const titles={home:['YOUR EARNING HUB','Earn points.','Complete tasks.','Browse partner offers, complete available tasks, and track your points.'],tasks:['COMPLETE TASKS','Tasks','Earn points.','Browse partner offers and surveys, then check platform tasks and your submission status below.'],rewards:['YOUR CATALOGUE','Rewards','Redeem carefully.','Review reward terms before making a request.'],withdrawal:['POINTS WALLET','Withdrawals','Clear terms.','See the current status of cash withdrawals.']};
  const t=titles[page],intro=document.querySelector('.intro');
  if(intro&&page!=='home'){
   const eyebrow=intro.querySelector('.eyebrow'),heading=intro.querySelector('h1'),desc=intro.querySelector('.muted');
