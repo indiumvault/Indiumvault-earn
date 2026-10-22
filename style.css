@@ -261,3 +261,47 @@ nav{width:100%;max-width:760px}
  .crypto-rate b{font-size:11px}
  .offerwall-feed-placeholder{padding:18px}
 }
+
+
+/* Tablet layout: use two balanced columns instead of stretching the phone layout. */
+@media (min-width:680px) and (max-width:899px){
+  .app{max-width:900px;padding-left:26px;padding-right:26px}
+  main{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:18px;row-gap:8px;align-items:start}
+  main>.intro{grid-column:span 4;align-self:center;padding:38px 0 26px}
+  main>.intro h1{font-size:clamp(43px,6.2vw,58px);letter-spacing:-1.5px}
+  main>.intro>.muted{max-width:440px;font-size:14px}
+  main>.stats{grid-column:span 2;display:grid;grid-template-columns:1fr;align-self:center;margin:24px 0;gap:9px}
+  main>.stats div{display:block;padding:13px 12px;min-width:0}
+  main>.stats b{font-size:17px}
+  main>.stats small{display:block;text-align:left;font-size:10px;margin-top:4px}
+  main>.offerwall-panel,main>.offerwall-dashboard{grid-column:1/-1;margin-top:20px;padding:22px}
+  main>.section#tasks{grid-column:span 3}
+  main>.section#rewards{grid-column:span 3}
+  main>.section#withdrawal{grid-column:2/span 4}
+  main>.referral,main>.notice{grid-column:1/-1}
+  .rewards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .offerwall-categories{flex-wrap:wrap;overflow:visible}
+  .offerwall-feed-wrap,.offerwall-feed-placeholder{min-height:440px}
+  #offerwallFrame{height:68vh;min-height:560px}
+  nav{max-width:900px}
+}
+@media (min-width:521px) and (max-width:679px){
+  .app{padding-left:20px;padding-right:20px}
+  main>.intro h1{font-size:clamp(39px,7vw,48px)}
+  .rewards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .offerwall-categories{flex-wrap:wrap;overflow:visible}
+}
+@media (max-width:520px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .app,main,section{min-width:0;max-width:100%}
+  .offerwall-dashboard,.offerwall-panel,.withdrawal-card,.referral{overflow-wrap:anywhere}
+  .crypto-withdrawal-form input,.crypto-withdrawal-form select{min-width:0}
+  .task-action{max-width:34%;flex-shrink:0}
+  .task-action button{max-width:100%;white-space:normal}
+}
+@media (min-width:900px){
+  .app{width:100%}
+  main>.stats div{min-width:0}
+  main>.section#tasks,main>.section#rewards,main>.section#withdrawal{min-width:0}
+  .offerwall-dashboard .offerwall-copy{min-width:0}
+}
