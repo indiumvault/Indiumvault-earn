@@ -145,3 +145,119 @@ nav a[data-page-link]{color:#858da8}nav a[data-page-link].nav-active,nav a[data-
 .crypto-withdrawal-form input:disabled,.crypto-withdrawal-form select:disabled{opacity:.45;cursor:not-allowed}
 .crypto-withdrawal-form .okay:disabled{opacity:.42;filter:saturate(.4)}
 .crypto-withdrawal-card .auth-message{line-height:1.6}
+
+
+/* Responsive layout pass: phone, tablet, desktop and wide monitors */
+.app{width:100%;min-width:0}
+main{min-width:0}
+img,iframe,video,canvas,svg{max-width:100%}
+button,a,input,textarea,select{touch-action:manipulation}
+.task-info,.task-action,.section,.offerwall-dashboard,.offerwall-panel,.referral{min-width:0}
+.task-info p,.task-info b,.admin-list-item,.notice,.muted{overflow-wrap:anywhere}
+.offerwall-categories{max-width:100%;overscroll-behavior-x:contain}
+nav{width:100%;max-width:760px}
+@media(min-width:521px) and (max-width:899px){
+ .app{max-width:900px;padding-left:28px;padding-right:28px}
+ .intro{padding-top:38px}
+ h1{font-size:clamp(42px,6.5vw,60px)}
+ .stats{gap:12px}
+ .stats div{padding:16px}
+ .stats b{font-size:19px}
+ .offerwall-dashboard{padding:22px}
+ .offerwall-categories{flex-wrap:wrap;overflow-x:visible}
+ .offerwall-categories span{font-size:12px}
+ .offerwall-feed-wrap,.offerwall-feed-placeholder{min-height:420px}
+ #offerwallFrame{min-height:600px;height:72vh}
+ .rewards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ nav{max-width:900px;padding-left:24px;padding-right:24px}
+ nav a,nav button{font-size:21px}
+ nav small{font-size:11px}
+}
+@media(min-width:900px){
+ .app{max-width:1240px;padding:0 38px 110px}
+ header{height:82px}
+ .brand .mark{width:44px;height:44px}
+ .brand b{font-size:19px}
+ .wallet-strip{margin-top:18px;padding:15px 19px}
+ .wallet-label b{font-size:14px}
+ .wallet-label small{font-size:11px}
+ .wallet-icon{width:40px;height:40px;font-size:22px}
+ .wallet-strip .amount{font-size:27px}
+ main{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:4px;align-items:start}
+ main>.intro{grid-column:span 7;align-self:center;padding:48px 0 28px}
+ main>.intro h1{font-size:clamp(52px,5vw,72px);max-width:720px}
+ main>.intro>.muted{font-size:15px;max-width:520px}
+ main>.stats{grid-column:span 5;grid-template-columns:1fr;align-self:center;margin:28px 0;gap:10px}
+ main>.stats div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px}
+ main>.stats b{font-size:19px}
+ main>.stats small{font-size:11px;margin:0;text-align:right}
+ main>.offerwall-panel,main>.offerwall-dashboard{grid-column:1/-1;margin-top:24px;padding:26px}
+ main>.section#tasks{grid-column:span 7}
+ main>.section#rewards{grid-column:span 5}
+ main>.section#withdrawal{grid-column:4/span 6}
+ main>.referral{grid-column:1/-1;margin-top:26px;padding:24px}
+ main>.notice{grid-column:1/-1;font-size:11px;margin-top:8px}
+ .offerwall-dashboard .offerwall-copy>.eyebrow,
+ .offerwall-dashboard .offerwall-copy>h2,
+ .offerwall-dashboard .offerwall-copy>.muted,
+ .offerwall-dashboard .offerwall-categories,
+ .offerwall-dashboard .offerwall-status,
+ .offerwall-dashboard #offerwallMessage,
+ .offerwall-dashboard #openOfferwall{grid-column:1/-1}
+ .offerwall-dashboard h2{font-size:28px}
+ .offerwall-dashboard>.muted{font-size:14px;max-width:760px}
+ .offerwall-categories{flex-wrap:wrap;overflow:visible}
+ .offerwall-categories span{font-size:12px;padding:10px 14px}
+ .offerwall-feed-wrap{min-height:560px}
+ .offerwall-feed-placeholder{min-height:560px}
+ #offerwallFrame{height:76vh;min-height:720px;max-height:1100px}
+ .task{padding:17px;gap:15px}
+ .task-info>b{font-size:14px}
+ .task-info p{font-size:12px}
+ .task-action button{padding:9px 14px}
+ .rewards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .rewards article{padding:16px}
+ .rewards article b{font-size:12px}
+ .rewards article p{font-size:10px}
+ .admin-form-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .withdrawal-card{padding:28px}
+ nav{max-width:1240px;padding:13px 36px calc(13px + env(safe-area-inset-bottom))}
+ nav a,nav button{font-size:21px;gap:5px}
+ nav small{font-size:11px}
+}
+@media(min-width:1440px){
+ .app{max-width:1440px;padding-left:52px;padding-right:52px}
+ main{column-gap:30px;row-gap:8px}
+ main>.intro{padding-top:58px;padding-bottom:38px}
+ main>.intro h1{font-size:76px}
+ main>.stats div{padding:20px 22px}
+ main>.offerwall-panel,main>.offerwall-dashboard{padding:32px}
+ main>.section#tasks{grid-column:span 7}
+ main>.section#rewards{grid-column:span 5}
+ main>.section#withdrawal{grid-column:4/span 6}
+ .offerwall-feed-wrap,.offerwall-feed-placeholder{min-height:620px}
+ #offerwallFrame{min-height:780px;height:78vh}
+ nav{max-width:1440px}
+}
+@media(min-width:1920px){
+ .app{max-width:1600px}
+ main>.intro h1{font-size:82px}
+ main>.intro>.muted{font-size:16px}
+ main>.offerwall-panel,main>.offerwall-dashboard{padding:36px}
+ nav{max-width:1600px}
+}
+@media(max-width:390px){
+ .wallet-strip{gap:8px;padding:10px}
+ .wallet-label{gap:7px}
+ .wallet-label b{font-size:11px}
+ .wallet-label small{font-size:9px}
+ .wallet-strip .amount{font-size:19px}
+ .wallet-strip .amount small{font-size:9px}
+ nav{padding-left:7px;padding-right:7px}
+ nav a,nav button{font-size:18px}
+ nav small{font-size:9px}
+ .crypto-payout-head h3{font-size:28px}
+ .crypto-rate{font-size:11px}
+ .crypto-rate b{font-size:11px}
+ .offerwall-feed-placeholder{padding:18px}
+}
