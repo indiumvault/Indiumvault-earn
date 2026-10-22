@@ -305,3 +305,12 @@ nav{width:100%;max-width:760px}
   main>.section#tasks,main>.section#rewards,main>.section#withdrawal{min-width:0}
   .offerwall-dashboard .offerwall-copy{min-width:0}
 }
+
+
+/* Rewards are not part of the current IndiumVault Earn product. Keep the legacy
+   markup hidden for compatibility with existing account scripts, but remove it
+   from navigation and layout until the feature is intentionally reintroduced. */
+.section#rewards,
+nav a[data-page-link="rewards"],
+.more-menu a[href="rewards.html"]{display:none!important}
+nav{grid-template-columns:repeat(4,minmax(0,1fr))}
