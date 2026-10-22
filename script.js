@@ -229,6 +229,7 @@ $('adminRewardForm')?.addEventListener('submit',async event=>{event.preventDefau
  const page=path.endsWith('/tasks.html')?'tasks':path.endsWith('/rewards.html')?'rewards':path.endsWith('/withdrawal.html')?'withdrawal':'home';
  const main=document.querySelector('main');
  if(!main)return;
+ document.body.classList.toggle('tasks-page',page==='tasks');
  const visibleByPage={
   home:['intro','balance','stats','adminPanel','offers','referral','notice'],
   tasks:['intro','balance','adminPanel','offers','tasks','notice'],
