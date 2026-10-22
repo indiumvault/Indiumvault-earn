@@ -336,3 +336,6 @@ body.tasks-page main>.section#tasks{display:block}
  body.tasks-page main>.offerwall-dashboard{display:grid;grid-template-columns:minmax(0,1fr)}
  body.tasks-page main>.offerwall-dashboard .offerwall-icon{display:none}
 }
+
+/* Hide any legacy Rewards link regardless of which menu contains it. */
+a[href="rewards.html"]{display:none!important}
