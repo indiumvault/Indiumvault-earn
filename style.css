@@ -349,7 +349,7 @@ nav a[data-page-link].nav-active,
 nav a[data-page-link][aria-current="page"]{
  color:var(--cyan)!important;
  background:rgba(103,232,249,.10)!important;
- border-top:2px solid var(--cyan)!important;
+ border-top:0!important;
  text-shadow:0 0 16px rgba(103,232,249,.28)!important;
 }
 nav a[data-page-link].nav-active small,
