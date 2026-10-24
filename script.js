@@ -153,6 +153,26 @@ $('close').addEventListener('click',()=>$('dialog').close());$('okay').addEventL
 if(isConfigured&&window.supabase){try{const sharedStorage={getItem(key){try{return window.localStorage.getItem(key)}catch(e){console.warn('Local session read failed; trying session storage',e);try{return window.sessionStorage.getItem(key)}catch{return null}}},setItem(key,value){try{window.localStorage.setItem(key,value)}catch(e){console.warn('Local session write failed; trying session storage',e);try{window.sessionStorage.setItem(key,value)}catch(storageError){console.error('Session storage unavailable',storageError);throw storageError}}},removeItem(key){try{window.localStorage.removeItem(key)}catch{}try{window.sessionStorage.removeItem(key)}catch{}}};authClient=window.supabase.createClient(authConfig.url,authConfig.anonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:sharedStorage,storageKey:'indiumvault-earn-auth-v1'}});authClient.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;renderAuth();queueMicrotask(()=>loadAccountData())});authClient.auth.getSession().then(async({data,error})=>{if(error){console.error('Session restore failed:',error);setAuthMessage('Could not restore your sign-in session. Please refresh the page.',true);return}currentUser=data.session?.user||null;renderAuth();await loadAccountData()}).catch(error=>{console.error('Session initialization failed:',error);setAuthMessage('Could not restore your sign-in session. Please refresh the page.',true)})}catch(error){console.error('Supabase initialization failed:',error);authClient=null}}
 renderAuth();
 
+// Re-check the persisted Supabase session when a page is restored or revisited.
+// This keeps the header and account data in sync across Home, Tasks, and Withdraw.
+let sessionSyncInProgress=false;
+async function syncPersistedSession(){
+ if(!authClient||sessionSyncInProgress)return;
+ sessionSyncInProgress=true;
+ try{
+  const {data,error}=await authClient.auth.getSession();
+  if(error){console.warn('Session resync failed:',error);return}
+  const nextUser=data.session?.user||null;
+  const previousId=currentUser?.id||null;
+  currentUser=nextUser;
+  renderAuth();
+  if((nextUser?.id||null)!==previousId||nextUser)await loadAccountData();
+ }catch(error){console.warn('Could not resync the signed-in account:',error)}
+ finally{sessionSyncInProgress=false}
+}
+window.addEventListener('pageshow',()=>{syncPersistedSession()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncPersistedSession()});
+
 function adminMessage(message,isError=false){const el=$('adminMessage');if(!el)return;el.textContent=message;el.classList.toggle('error',isError)}
 
 
